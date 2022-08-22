@@ -2,6 +2,7 @@
 using HangfireApp.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace HangfireApp.Web.Controllers
 {
@@ -34,6 +35,27 @@ namespace HangfireApp.Web.Controllers
         {
             //Der Registrierungsprozess der Mitglieder findet im Rahmen dieser Methode statt.
             FireAndForgetJobs.EmailSendenZuBenutzerJob("123","Willkommen auf unserer Website");
+            return View();
+        }
+
+        public IActionResult BildSpeichern()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> BildSpeichern(IFormFile bild)
+        {
+            string neueDateiName = String.Empty;
+            if(bild!=null && bild.Length>0)
+            {
+                neueDateiName = Guid.NewGuid().ToString() + Path.GetExtension(bild.FileName);
+                var weg = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/bilder", neueDateiName);
+                using(var strom=new FileStream(weg,FileMode.Create))
+                {
+                    await bild.CopyToAsync(strom);
+                }
+                string jobId=BackgroundJobs.DelayedJobs.WasserZeichenJobHinzufügen(neueDateiName, "www.meinewebseite.com");
+            }
             return View();
         }
     }
