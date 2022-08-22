@@ -56,6 +56,7 @@ namespace HangfireApp.Web.Controllers
                     await bild.CopyToAsync(strom);
                 }
                 string jobId=BackgroundJobs.DelayedJobs.WasserZeichenJobHinzufügen(neueDateiName, "www.meinewebseite.com");
+                BackgroundJobs.ContinuationsJobs.SchreibenWasserZeichenStatus(jobId,neueDateiName);
             }
             return View();
         }
