@@ -1,8 +1,10 @@
 using Hangfire;
+using HangfireApp.Web.Dienste;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IEmailAbsender, EmailAbsender>();
 builder.Services.AddHangfire(konfig =>
 {
     konfig.UseSqlServerStorage("Data Source=THINKPAD;Initial Catalog=HangfireDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
