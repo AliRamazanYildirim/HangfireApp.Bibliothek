@@ -1,6 +1,14 @@
+using Hangfire;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHangfire(konfig =>
+{
+    konfig.UseSqlServerStorage("Data Source=THINKPAD;Initial Catalog=HangfireDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+});
+builder.Services.AddHangfireServer();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -15,6 +23,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+//www.meinewebseite.com/hangfire
+app.UseHangfireDashboard("/hangfire");
 
 app.UseRouting();
 
