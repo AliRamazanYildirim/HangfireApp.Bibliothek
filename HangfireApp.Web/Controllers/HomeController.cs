@@ -40,6 +40,7 @@ namespace HangfireApp.Web.Controllers
 
         public IActionResult BildSpeichern()
         {
+            BackgroundJobs.RecurringJobs.BerichterStattungsProzess();
             return View();
         }
         [HttpPost]
